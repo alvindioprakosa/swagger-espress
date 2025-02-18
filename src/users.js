@@ -2,17 +2,17 @@ let users = [
   {
     id: 1,
     name: "user 1",
-    email: "example@email.com",
+    email: "User@email.com",
   },
   {
     id: 2,
     name: "user 2",
-    email: "example2@email.com",
+    email: "User2@email.com",
   },
   {
     id: 3,
     name: "user 3",
-    email: "example3@email.com",
+    email: "User3@email.com",
   },
 ];
 
