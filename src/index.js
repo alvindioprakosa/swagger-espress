@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { create, getAll, getById, remove, update } from "./users.js";
@@ -6,6 +7,8 @@ import { create, getAll, getById, remove, update } from "./users.js";
 const app = express();
 const PORT = 3000;
 
+// Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -34,7 +37,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
  *         - email
  *       properties:
  *         id:
- *           type: Integer
+ *           type: integer
  *           description: The auto-generated id of the user
  *         name:
  *           type: string
@@ -56,131 +59,22 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
  *   description: The User API
  */
 
-/**
- * @swagger
- * /users:
- *   get:
- *     summary: Get all users
- *     tags: [Users]
- *     responses:
- *       200:
- *         description: The list of all users
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
- */
+// User Routes
 app.get("/users", getAll);
-
-/**
- * @swagger
- * /users/{id}:
- *   get:
- *     summary: Get user by id
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The user id
- *     responses:
- *       200:
- *         description: The user description by id
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *     404:
- *         description: The user was not found
- */
 app.get("/users/:id", getById);
-
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: Create a new user
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: The user was successfully created
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       400:
- *         description: Invalid user data
- */
 app.post("/users", create);
-
-/**
- * @swagger
- * /users/{id}:
- *   put:
- *     summary: Update the user by the id
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The user id
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: The user was updated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       404:
- *         description: The user was not found
- *       500:
- *         description: Some error happened
- *
- */
 app.put("/users/:id", update);
-
-/**
- * @swagger
- * /users/{id}:
- *   delete:
- *     summary: Remove the user by id
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The user id
- *
- *     responses:
- *       200:
- *         description: The user was deleted
- *       404:
- *         description: The user was not found
- */
 app.delete("/users/:id", remove);
 
+// Root Route
 app.get("/", (req, res) => {
   res.send("Hello World!!");
+});
+
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: "Something went wrong!" });
 });
 
 app.listen(PORT, () => {
