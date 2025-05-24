@@ -12,4 +12,3 @@ A simple and powerful **Express.js** API with interactive **Swagger** documentat
 ---
 
 ## 📁 Project Structure
-
