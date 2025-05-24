@@ -38,7 +38,9 @@ export const update = (req, res) => {
 
   const { name, email } = req.body;
   if (!name || !email) {
-    return res.status(400).json({ message: "Both name and email are required to update" });
+    return res
+      .status(400)
+      .json({ message: "Both name and email are required to update" });
   }
 
   users[index] = { ...users[index], name, email };
